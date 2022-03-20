@@ -1,13 +1,13 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { setCurrentID } from "../../../store/postSlice";
+import { setCurrentID } from "../../../redux-store/postSlice";
 import { styles } from "./styles";
 import { Box, Typography, Button, CardMedia, CardContent, CardActions, Card } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import moment from "moment";
-import { deletePost, likePost } from "../../../store/postSlice";
+import { deletePost, likePost } from "../../../redux-store/postSlice";
 
 export default function Post(props) {
   const post = props.post;

@@ -7,7 +7,7 @@ export const styles = {
   paper: {
     maxWidth: "350px",
     padding: "0 10px",
-    borderRadius: "15px",
+    borderRadius: "5px",
     backgroundColor: "#F7F7F7",
   },
   heading: {

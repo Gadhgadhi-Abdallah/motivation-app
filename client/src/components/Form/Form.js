@@ -4,7 +4,7 @@ import { Paper, TextField, Typography, Box, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
 import FileBase from "react-file-base64";
-import { createPosts, disableCurrentID, updatePost, getPosts } from "../../store/postSlice";
+import { createPosts, disableCurrentID, updatePost, getPosts } from "../../redux-store/postSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
@@ -54,7 +54,7 @@ export default function Form() {
     <Box sx={styles.box}>
       <Paper elevation={3} sx={styles.paper}>
         <Typography variant="subtitle1" sx={styles.heading}>
-          {!currentID ? "Create a" : "Edit "} Post 😃
+          {!currentID ? "Create a" : "Edit "} Post
         </Typography>
         <form autoComplete="off" onSubmit={handelSubmit}>
           <TextField
