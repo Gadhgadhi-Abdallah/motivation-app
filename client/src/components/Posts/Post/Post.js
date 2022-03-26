@@ -9,15 +9,17 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import moment from "moment";
 import { deletePost, likePost } from "../../../redux-store/postSlice";
 
-export default function Post(props) {
-  const post = props.post;
+export default function Post({ post }) {
   const dispatch = useDispatch();
+  const user = JSON.parse(localStorage.getItem("profile"));
+  let checker = user?.result?.googleId === post.creator || user?.result?._id === post.creator;
+
   return (
     <Card sx={styles.card}>
       <CardMedia component="img" height="140" image={post.selectedFile} alt="" />
       <Box sx={styles.boxMedia}>
         <Typography variant="h6" component="div" color="white">
-          {post.creator}
+          {post.name}
         </Typography>
         <Typography gutterBottom variant="body2" component="div" color="white">
           {moment(post.createdAt).fromNow()}
@@ -39,41 +41,47 @@ export default function Post(props) {
         <Button
           size="small"
           sx={styles.likeButton}
+          disabled={!user?.result}
           onClick={() => {
             dispatch(likePost(post._id));
           }}
         >
           <ThumbUpIcon sx={{ fontSize: "1.2rem" }} />
-          <Typography variant="subtitle2" color="primary">
-            Like {post.likeCount}
+          <Typography variant="subtitle2" color={!user?.result ? "gray" : "primary"}>
+            Like {post.likes.length}
           </Typography>
         </Button>
-        <Button
-          size="small"
-          color="secondary"
-          sx={styles.editButton}
-          onClick={() => {
-            dispatch(setCurrentID(post._id));
-          }}
-        >
-          <EditIcon sx={{ fontSize: "1.2rem" }} />
-          <Typography variant="subtitle2" color="secondary">
-            Edit
-          </Typography>
-        </Button>
-        <Button
-          size="small"
-          color="error"
-          sx={styles.deleteButton}
-          onClick={() => {
-            dispatch(deletePost(post._id));
-          }}
-        >
-          <DeleteIcon sx={{ fontSize: "1.2rem" }} />
-          <Typography variant="subtitle2" color="error">
-            Delete
-          </Typography>
-        </Button>
+        {checker && (
+          <Button
+            href="#form"
+            size="small"
+            color="secondary"
+            sx={styles.editButton}
+            onClick={() => {
+              dispatch(setCurrentID(post._id));
+            }}
+          >
+            <EditIcon sx={{ fontSize: "1.2rem" }} />
+            <Typography variant="subtitle2" color="secondary">
+              Edit
+            </Typography>
+          </Button>
+        )}
+        {checker && (
+          <Button
+            size="small"
+            color="error"
+            sx={styles.deleteButton}
+            onClick={() => {
+              dispatch(deletePost(post._id));
+            }}
+          >
+            <DeleteIcon sx={{ fontSize: "1.2rem" }} />
+            <Typography variant="subtitle2" color="error">
+              Delete
+            </Typography>
+          </Button>
+        )}
       </CardActions>
     </Card>
   );

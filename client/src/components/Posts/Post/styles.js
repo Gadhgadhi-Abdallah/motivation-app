@@ -2,7 +2,7 @@ export const styles = {
   card: {
     width: 320,
     height: 360,
-    borderRadius: "15px",
+    borderRadius: "7px",
     position: "relative",
   },
   boxMedia: {

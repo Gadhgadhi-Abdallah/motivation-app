@@ -4,23 +4,18 @@ import { Paper, TextField, Typography, Box, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
 import FileBase from "react-file-base64";
-import { createPosts, disableCurrentID, updatePost, getPosts } from "../../redux-store/postSlice";
+import { createPosts, disableCurrentID, updatePost } from "../../redux-store/postSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
 export default function Form() {
-  const [postData, setPostData] = useState({
-    creator: "",
-    title: "",
-    message: "",
-    tags: "",
-    selectedFile: "",
-  });
+  const [postData, setPostData] = useState({ title: "", message: "", tags: "", selectedFile: "" });
   const dispatch = useDispatch();
   const currentID = useSelector((state) => state.posts.currentID);
   const posts = useSelector((state) => state.posts.value);
   const post = currentID ? posts.find((p) => p._id === currentID) : null;
 
+  const user = JSON.parse(localStorage.getItem("profile"));
   // Populate the post in the form when there is a currentID
   useEffect(() => {
     if (post) {
@@ -31,25 +26,28 @@ export default function Form() {
   const handelSubmit = (e) => {
     e.preventDefault();
     if (currentID) {
+      console.log("postData form :" + postData);
       dispatch(updatePost({ currentID, postData }));
-      dispatch(getPosts());
     } else {
-      dispatch(createPosts(postData));
+      dispatch(createPosts({ ...postData, name: user?.result?.name }));
     }
     clear();
   };
 
   const clear = () => {
-    setPostData({
-      creator: "",
-      title: "",
-      message: "",
-      tags: "",
-      selectedFile: "",
-    });
+    setPostData({ title: "", message: "", tags: "", selectedFile: "" });
     dispatch(disableCurrentID());
   };
 
+  if (!user?.result?.name) {
+    return (
+      <Paper>
+        <Typography variant="h6" align="center">
+          Please sign In to create your own posts and likes others posts.
+        </Typography>
+      </Paper>
+    );
+  }
   return (
     <Box sx={styles.box}>
       <Paper elevation={3} sx={styles.paper}>
@@ -57,13 +55,6 @@ export default function Form() {
           {!currentID ? "Create a" : "Edit "} Post
         </Typography>
         <form autoComplete="off" onSubmit={handelSubmit}>
-          <TextField
-            sx={styles.textField}
-            label="Creator"
-            fullWidth
-            value={postData.creator}
-            onChange={(e) => setPostData({ ...postData, creator: e.target.value })}
-          />
           <TextField
             sx={styles.textField}
             label="Title"

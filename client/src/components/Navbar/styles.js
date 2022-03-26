@@ -1,6 +1,6 @@
 export const styles = {
   appbar: {
-    borderRadius: 5,
+    borderRadius: "10px",
     margin: "15px 0",
     padding: "0 15px",
     display: "flex",
@@ -9,15 +9,18 @@ export const styles = {
     alignItems: "center",
   },
   heading: {
-    color: "#398AB9",
+    display: { xs: "none", sm: "flex" },
+    color: "#1A1A40",
     marginRight: "15px",
+    fontFamily: "Roboto",
+    fontWeight: "700",
   },
 
   headingLogo: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: "20px",
+    marginLeft: { xs: 0, sm: "20px" },
   },
   profile: {
     display: "flex",
@@ -26,5 +29,13 @@ export const styles = {
   },
   username: {
     padding: "0 10px",
+    textAlign: "center",
+    fontSize: { xs: "1rem", sm: "1.2rem" },
+  },
+  avatar: {
+    margin: "0 5px",
+  },
+  logout: {
+    margin: "0 5px",
   },
 };

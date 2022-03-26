@@ -8,12 +8,14 @@ export const styles = {
     maxWidth: "350px",
     padding: "0 10px",
     borderRadius: "5px",
-    backgroundColor: "#F7F7F7",
+    // backgroundColor: "#F7F7F7",
   },
   heading: {
     textAlign: "center",
-    fontSize: "1.8rem",
-    color: "#398AB9",
+    fontSize: "1.5rem",
+    fontFamily: "Roboto",
+    fontWeight: "700",
+    color: "#1A1A40",
   },
   file64: {
     display: "flex",

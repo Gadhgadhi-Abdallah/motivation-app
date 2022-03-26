@@ -4,28 +4,39 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import GoogleIcon from "@mui/icons-material/Google";
 import { GoogleLogin } from "react-google-login";
 import { useDispatch } from "react-redux";
-import { googleAuth } from "../../redux-store/authSlice";
+import { googleAuth, signIn, signUp } from "../../redux-store/authSlice";
 import { useNavigate } from "react-router-dom";
+
+const initialState = { firstName: "", lastName: "", email: "", password: "", confirmPassword: "" };
 
 export default function Auth() {
   const [isSignUp, setIsSignUp] = useState(true);
+  const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isSignUp) {
+      await dispatch(signUp(formData));
+      navigate("/");
+    } else {
+      await dispatch(signIn(formData));
+      navigate("/");
+    }
   };
 
-  const handleChange = () => {};
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const swithMode = () => {
     setIsSignUp(!isSignUp);
   };
 
   const googleSuccess = async (res) => {
-    const result = res?.profileObj; // ?. optional chaining operator to handel undefined obj
+    const result = res?.profileObj;
     const token = res?.tokenId;
-    //because we work with async function we use try-catch
     try {
       dispatch(googleAuth({ result, token }));
       navigate("/");
@@ -39,10 +50,9 @@ export default function Auth() {
   };
 
   return (
-    <Container maxWidth="xs" sx={{ backgroundColor: "#FBF8F1", borderRadius: "5px" }}>
+    <Container maxWidth="xs" sx={{ backgroundColor: "#FDFDF6", borderRadius: "10px", border: "1px solid #E7E6E1" }}>
       <Box
         sx={{
-          marginTop: "5vh",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -83,7 +93,9 @@ export default function Auth() {
           <Button type="submit" fullWidth variant="contained" sx={{ margin: "10px 0" }}>
             {isSignUp ? "Sign Up" : "Sign In"}
           </Button>
+
           <GoogleLogin
+            //in production clientId = process.env.GOOGLE_Client_ID
             clientId="76142288089-16ho972njtap29khrnpccdeh8o7e3bqm.apps.googleusercontent.com"
             render={(renderProps) => (
               <Button
@@ -102,6 +114,7 @@ export default function Auth() {
             onFailure={googleFailure}
             cookiePolicy={"single_host_origin"}
           />
+
           <Grid container justifyContent="flex-end" sx={{ mb: 2 }}>
             <Grid item>
               <Link href="#" variant="body2" onClick={swithMode}>

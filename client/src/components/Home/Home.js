@@ -16,7 +16,7 @@ function Home() {
   return (
     <Grow in>
       <Container>
-        <Grid container justify="space-between" alignItems="stretch" spacing={3}>
+        <Grid container justify="space-between" alignItems="stretch" spacing={3} sx={{ flexDirection: { xs: "column-reverse", sm: "row" } }}>
           <Grid item xs={12} md={8}>
             <Posts />
           </Grid>

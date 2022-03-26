@@ -5,27 +5,31 @@ import { styles } from "./styles";
 import motivation from "./motivation-icon.png";
 import { useDispatch } from "react-redux";
 import { logOut } from "../../redux-store/authSlice";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import decode from "jwt-decode";
 
 export default function Navbar() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const location = useLocation();
 
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
 
   useEffect(() => {
+    const token = user?.token;
+    if (token) {
+      const decodedToken = decode(token);
+      if (decodedToken.exp * 1000 < new Date().getTime()) logout();
+    }
     setUser(JSON.parse(localStorage.getItem("profile")));
   }, [location]);
 
   const logout = () => {
     dispatch(logOut());
-    navigate("/");
     setUser(null);
   };
 
   return (
-    <AppBar position="static" color="inherit" sx={styles.appbar}>
+    <AppBar position="static" color="inherit" sx={styles.appbar} id="form">
       <Box sx={styles.headingLogo}>
         <Link href="/" sx={{ textDecoration: "none" }}>
           <Typography variant="h4" sx={styles.heading}>
@@ -43,7 +47,7 @@ export default function Navbar() {
             <Typography sx={styles.username} variant="h6">
               {user.result.name}
             </Typography>
-            <Button variant="contained" sx={styles.logout} color="secondary" onClick={logout}>
+            <Button href="/" variant="contained" sx={styles.logout} color="secondary" onClick={logout}>
               Logout
             </Button>
           </Box>
